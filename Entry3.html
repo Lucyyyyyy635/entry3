@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Emotional Cartography</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light.css" />
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script src="https://unpkg.com/tippy.js@6"></script>
+  <style>
+    body {
+      font-family: "Roboto", sans-serif;
+      background-color: #f4f4f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* 初始页面背景色 */
+    body {
+      transition: background-color 2s ease;
+      /* 背景色变化过渡 */
+    }
+
+    header {
+      /* background: linear-gradient(to right, #4caf50, #81c784); */
+      background: url('./20241203195806.jpg');
+      color: #000;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-family: "Playfair Display", serif;
+      font-size: 3em;
+      margin: 0;
+    }
+
+    nav {
+      background: #388e3c;
+      display: flex;
+      justify-content: center;
+      padding: 10px 0;
+    }
+
+    nav a {
+      color: white;
+      margin: 0 15px;
+      text-decoration: none;
+      font-size: 1.2em;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #c8e6c9;
+    }
+
+    section {
+      padding: 30px;
+      margin: 20px auto;
+      max-width: 1200px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    section h2 {
+      font-family: "Playfair Display", serif;
+      font-size: 1.8em;
+      color: #388e3c;
+      margin-bottom: 20px;
+    }
+
+    p {
+      line-height: 1.8;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      transition: transform 0.3s;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+
+    .icons-container {
+      display: flex;
+      justify-content: space-around;
+      padding: 20px 0;
+    }
+
+    .icon {
+      width: 100px;
+      height: 100px;
+      background-color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+
+    .icon:hover {
+      transform: scale(1.1);
+      background-color: #fff;
+    }
+
+    .icon img {
+      width: 50%;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px 0;
+      background: #4caf50;
+      color: white;
+      margin-top: 20px;
+    }
+
+    .tooltip-content {
+      max-width: 300px;
+      font-size: 0.9em;
+      line-height: 1.4;
+    }
+
+    .form-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      max-width: 400px;
+    }
+
+    input,
+    textarea {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px;
+      background: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #45a049;
+    }
+
+    .entries {
+      margin-top: 20px;
+    }
+
+    .entry {
+      background: #f4f4f9;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin-bottom: 10px;
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #8ACEF7;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 50%;
+      font-size: 1.5em;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: background 0.3s ease;
+    }
+
+    .back-to-top:hover {
+      background-color: #F9DD4A;
+    }
+
+
+
+
+    .text {
+      font-size: 13px;
+      font-family: Arial, sans-serif;
+      opacity: 0;
+      /* 初始状态为透明 */
+      animation: fadeIn 3s forwards;
+      /* 动画效果，持续3秒 */
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        /* 动画开始时完全透明 */
+      }
+
+      100% {
+        opacity: 1;
+        /* 动画结束时完全不透明 */
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Emotional Cartography</h1>
+    <p>Discover the emotions behind the places that matter</p>
+  </header>
+
+  <nav>
+    <a href="#intro">Introduction</a>
+    <a href="#icons">Icons</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#form">Share Emotion</a>
+    <a href="main.html">Go to Home Page</a>
+  </nav>
+
+  <section id="intro">
+    <h2>Introduction</h2>
+    <p>
+      Emotional Cartography is a journey of visualizing the connection between our emotions and the places we inhabit.
+      Each point on this map holds a memory, a feeling, or an experience that defines our relationship with the world.
+    </p>
+  </section>
+
+  <section id="icons">
+    <h2>Emotional Icons</h2>
+    <div class="icons-container">
+      <div class="icon" data-tippy-content="Happy: Bright moments of joy." onclick="changeBackgroundColor('orange')">
+        <img src="images/e1.png" alt="Happy" />
+      </div>
+      <div class="icon" data-tippy-content="Sad: Melancholic memories." onclick="changeBackgroundColor('purple')">
+        <img src="images/1.jpg" alt="Sad" />
+      </div>
+      <div class="icon" data-tippy-content="Inspired: Creativity unleashed." onclick="changeBackgroundColor('blue')">
+        <img src="images/2.jpg" alt="Inspired" />
+      </div>
+      <div class="icon" data-tippy-content="Calm: A peaceful pause." onclick="changeBackgroundColor('red')">
+        <img src="images/3.jpg" alt="Calm" />
+      </div>
+      <div class="icon" data-tippy-content="Calm: A peaceful pause." onclick="changeBackgroundColor('grey')">
+        <img src="images/4.jpg" alt="Calm" />
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery" style="
+  padding-bottom: 80px;
+">
+    <h2>Emotion Map Gallery</h2>
+    <div class="gallery" style="position: relative;">
+      <img src="./20241203201532.jpg" alt="Cafe - Joy" />
+
+      <div  class="text"  style="position: absolute;left: 0;bottom: -50px;width: 380px;text-align: center;">
+        Art museums that fill me with inspiration and curiosity.
+      </div>
+
+      <img src="./20241203201551.jpg" alt="Museum - Inspiration" />
+
+      <div  class="text"  style="position: absolute;left: 400px;bottom: -50px;width: 380px;text-align: center;">Parks that offer
+        relaxation and a moment to connect with
+        nature.</div>
+
+
+      <img src="./20241203201545.jpg" alt="Park - Nostalgia" />
+
+
+      <div class="text" style="position: absolute;left: 810px;bottom: -50px;width: 380px;text-align: center;">Cafes that bring a
+        sense of happiness and anticipation.</div>
+
+
+
+    </div>
+
+  </section>
+
+  <section id="form">
+    <h2>Share Your Emotion</h2>
+    <div class="form-container">
+      <form id="emotionForm">
+        <input type="text" id="location" placeholder="Enter Location" required />
+        <textarea id="emotion" rows="4" placeholder="Describe Your Emotion" required></textarea>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+    <div class="entries" id="entries"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2024 Emotional Cartography. All Rights Reserved.</p>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" onclick="scrollToTop()">↑</button>
+
+  <script>
+
+
+
+    // 函数改变背景色
+    function changeBackgroundColor(color) {
+      document.body.style.backgroundColor = color;
+    }
+
+
+
+
+    tippy(".icon", {
+      theme: "light",
+      animation: "scale",
+      duration: [200, 150],
+    });
+
+    document.getElementById("emotionForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const location = document.getElementById("location").value.trim();
+      const emotion = document.getElementById("emotion").value.trim();
+
+      if (location && emotion) {
+        const entry = document.createElement("div");
+        entry.classList.add("entry");
+        entry.innerHTML = `<strong>${location}:</strong> ${emotion}`;
+        document.getElementById("entries").appendChild(entry);
+        e.target.reset();
+      }
+    });
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  </script>
+</body>
+
+</html>
